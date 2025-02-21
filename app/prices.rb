@@ -6,6 +6,14 @@ class Prices
     @annually = annually
   end
 
+  def monthly
+    @monthly
+  end
+
+  def annually
+    @annually
+  end
+
   def ensure_valid_arguments(monthly, annually)
     ensure_valid_monthly(monthly)
     ensure_valid_annually(annually, monthly)
