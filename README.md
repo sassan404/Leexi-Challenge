@@ -5,9 +5,10 @@ manage pricing modules, subscriptions, and prices for subscriptions.
 
 ## Controllers that handle API requests
 
-### `HelloWorldController`
+### `HomeController`
 
-This controller handles a simple GET request to return a "Hello, World!" message in JSON format.
+This controller handles a simple GET request to return a web page to show the pricing modules and allow users to compute
+their prices.
 
 ### `PricingModulesController`
 
@@ -36,30 +37,7 @@ validate the input, find the appropriate pricing module, and compute prices.
 
 ## Schematic Overview
 
-```plaintext
-+------------------------+       +------------------------+
-|   HelloWorldController |       | PricingModulesController|
-|------------------------|       |------------------------|
-| + get_message          |       | + /v1/prices            |
-+------------------------+       +------------------------+
-            |                                |
-            v                                v
-+------------------------+       +------------------------+
-|  SubscriptionController|       |    PricingModule       |
-|------------------------|       |------------------------|
-| + /v1/prices           |       | + initialize           |
-| + create_from_json     |       | + to_json              |
-| + compute_prices       |       +------------------------+
-+------------------------+                |
-                                           |
-                                           v
-                                  +------------------------+
-                                  |        Prices          |
-                                  |------------------------|
-                                  | + initialize           |
-                                  | + to_json              |
-                                  +------------------------+
-```
+![uml leexi.drawio.svg](uml leexi.drawio.svg)
 
 ## Setup and Running the App
 
@@ -68,12 +46,12 @@ validate the input, find the appropriate pricing module, and compute prices.
 - Ruby (version 3.0 or higher)
 - Bundler
 - Sinatra
-gem 'json'
-gem 'minitest'
-gem 'puma' # A lightweight web server for Ruby
-gem 'rack-test' # HTTP request testing for Sinatra
-gem 'minitest-reporters' # For test output
-gem 'rackup'
+- json
+- minitest
+- puma
+- rack-test
+- minitest-reporters
+- rackup
 
 ### Installation
 
@@ -105,3 +83,5 @@ ruby -I test test/app_test.rb
 ```
 
 This command sets up the test environment and runs the specified test file.
+
+It is also possible to run the tests via the Github Actions workflow.

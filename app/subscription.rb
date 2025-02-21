@@ -54,7 +54,7 @@ class Subscription
   def Subscription.create_from_json (json)
     data = JSON.parse(json)
     plan = data["plan"]
-    number_of_licenses = data["number_of_licenses"]
+    number_of_licenses = data["numberOfLicenses"]
     period = data["period"]
     Subscription.new(plan, number_of_licenses, period)
   end
