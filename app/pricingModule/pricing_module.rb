@@ -88,4 +88,20 @@ class PricingModule
     end
     hash_map.to_json(*args)
   end
+
+  def plan
+    @plan
+  end
+
+  def price_per_license
+    @price_per_license
+  end
+
+  def max_number_of_licenses
+    @max_number_of_licenses
+  end
+
+  def min_number_of_licenses
+    @min_number_of_licenses
+  end
 end

@@ -1,4 +1,4 @@
-require_relative 'pricingModule/'
+require_relative 'pricing_module'
 
 begin
 
@@ -11,7 +11,7 @@ begin
     PricingModule.create("aiMeeting", 50, 15),
     PricingModule.create("enterprise", 10, 50, 55),
     PricingModule.create("enterprise", 50, 40),
-  ].filter { |model| model.is_a?(PricingModule) }
+  ]
 
 end
 
