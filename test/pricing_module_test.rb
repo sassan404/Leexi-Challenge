@@ -57,7 +57,13 @@ class PricingModuleTest < Minitest::Test
     get '/v1/prices' # Simulate GET request to `/`
     assert last_response.ok?
     assert_equal "application/json", last_response.content_type
-    expected_response = [{ "plan": "aiMeeting", "min_number_of_licenses": 0, "price_per_license": 29, "max_number_of_licenses": 9 }, { "plan": "aiMeeting", "min_number_of_licenses": 10, "price_per_license": 25, "max_number_of_licenses": 50 }, { "plan": "aiMeeting", "min_number_of_licenses": 50, "price_per_license": 15 }, { "plan": "enterprise", "min_number_of_licenses": 10, "price_per_license": 55, "max_number_of_licenses": 50 }, { "plan": "enterprise", "min_number_of_licenses": 50, "price_per_license": 40 }]
+    expected_response = [
+      { "plan": "aiMeeting", "min_number_of_licenses": 0, "price_per_license": 29, "max_number_of_licenses": 9 },
+      { "plan": "aiMeeting", "min_number_of_licenses": 10, "price_per_license": 25, "max_number_of_licenses": 50 },
+      { "plan": "aiMeeting", "min_number_of_licenses": 50, "price_per_license": 15 },
+      { "plan": "enterprise", "min_number_of_licenses": 10, "price_per_license": 55, "max_number_of_licenses": 50 },
+      { "plan": "enterprise", "min_number_of_licenses": 50, "price_per_license": 40 }
+    ]
     assert_equal(expected_response.to_json, last_response.body)
   end
 end
