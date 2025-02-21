@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Leexi Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .form-container {
+            margin-top: 20px;
+        }
+
+        select, input, button {
+            margin: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Available Subscription Plans</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Plan</th>
+        <th>Min Licenses</th>
+        <th>Max Licenses</th>
+        <th>Price per License</th>
+    </tr>
+    </thead>
+    <tbody id="pricing-table">
+    </tbody>
+</table>
+
+<div class="form-container">
+    <h2>Select a Plan</h2>
+    <label for="plan">Plan:</label>
+    <select id="plan">
+        <option value="enterprise">Enterprise</option>
+        <option value="aiMeeting">AI Meeting</option>
+    </select>
+
+    <label for="period">Period:</label>
+    <select id="period">
+        <option value="monthly">Monthly</option>
+        <option value="annually">Annually</option>
+    </select>
+
+    <label for="licenses">Number of Licenses:</label>
+    <input id="licenses" min="1" type="number" value="1">
+
+    <button onclick="submitSelection()">Get Price</button>
+</div>
+
+<h2 id="result"></h2>
+
+<h2>History</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Plan</th>
+        <th>Period</th>
+        <th>Number of Licenses</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody id="history-table">
+    </tbody>
+</table>
+
+<script>
+    let history = [];
+
+    async function fetchPricing() {
+        try {
+            const response = await fetch('http://localhost:8080/v1/prices', {method: 'get'});
+            const data = await response.json();
+            displayPricing(data);
+        } catch (error) {
+            console.error("Error fetching prices:", error);
+        }
+    }
+
+    function displayPricing(prices) {
+        const tableBody = document.getElementById("pricing-table");
+        tableBody.innerHTML = '';
+        
+        prices.forEach(price => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td>${price.plan}</td>
+                    <td>${price.min_number_of_licenses}</td>
+                    <td>${price.max_number_of_licenses}</td>
+                    <td>$${price.price_per_license}</td>
+                `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    async function submitSelection() {
+        const plan = document.getElementById("plan").value;
+        const period = document.getElementById("period").value;
+        const numberOfLicenses = parseInt(document.getElementById("licenses").value);
+
+        try {
+            const response = await fetch('http://localhost:8080/v1/prices', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({numberOfLicenses, plan, period})
+            });
+
+            if (!response.ok) {
+
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.error);
+            }
+            const data = await response.json();
+            const price = `$${data.prices[period]}`;
+            document.getElementById("result").innerText = `You selected the ${plan} plan. ${period.charAt(0).toUpperCase() + period.slice(1)} Price: ${price}`;
+
+            history.push({plan, period, numberOfLicenses, price});
+            updateHistoryTable();
+        } catch (error) {
+            document.getElementById("result").innerText = `Error fetching subscription price: ${error.message}`;
+        }
+    }
+
+    function updateHistoryTable() {
+        const historyTable = document.getElementById("history-table");
+        historyTable.innerHTML = '';
+        history.forEach(entry => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td>${entry.plan}</td>
+                    <td>${entry.period}</td>
+                    <td>${entry.numberOfLicenses}</td>
+                    <td>${entry.price}</td>
+                `;
+            historyTable.appendChild(row);
+        });
+    }
+
+    fetchPricing();
+</script>
+</body>
+</html>
