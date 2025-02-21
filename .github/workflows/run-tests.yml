@@ -15,12 +15,10 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0' # Specify the Ruby version you are using
+          ruby-version: '3.1' # Specify the Ruby version you are using
 
       - name: Install dependencies
-        run: |
-          gem install bundler -v 2.3
-          bundle install
+        run: bundle install
 
       - name: Run tests
         run: bundle ruby -I test test/app_test.rb
