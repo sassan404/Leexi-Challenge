@@ -1,9 +1,9 @@
 # Project Overview
 
 This project is a Ruby-based web application using the Sinatra framework. It includes several controllers and classes to
-manage pricing modules, subscriptions, and basic responses.
+manage pricing modules, subscriptions, and prices for subscriptions.
 
-## Classes and Modules
+## Controllers that handle API requests
 
 ### `HelloWorldController`
 
@@ -16,6 +16,8 @@ This controller handles GET requests to return a list of pricing modules in JSON
 ### `SubscriptionController`
 
 This controller handles POST requests to create a subscription and compute prices based on the provided data.
+
+## Classes and Modules
 
 ### `PricingModule`
 
@@ -61,14 +63,21 @@ validate the input, find the appropriate pricing module, and compute prices.
 
 ## Setup and Running the App
 
-### Prerequisites
+### Dependecies and used gems
 
 - Ruby (version 3.0 or higher)
 - Bundler
+- Sinatra
+gem 'json'
+gem 'minitest'
+gem 'puma' # A lightweight web server for Ruby
+gem 'rack-test' # HTTP request testing for Sinatra
+gem 'minitest-reporters' # For test output
+gem 'rackup'
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository: (get the repository_url from the code button at the top)
    ```sh
    git clone <repository_url>
    cd <repository_directory>
