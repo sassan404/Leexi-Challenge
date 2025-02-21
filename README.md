@@ -37,7 +37,7 @@ validate the input, find the appropriate pricing module, and compute prices.
 
 ## Schematic Overview
 
-![uml leexi.drawio.svg](uml leexi.drawio.svg)
+![uml leexi.drawio.svg](uml_leexi.drawio.svg)
 
 ## Setup and Running the App
 
