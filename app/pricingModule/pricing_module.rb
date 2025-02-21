@@ -11,14 +11,14 @@ class PricingModule
   end
 
   def ensure_valid_arguments(plan, min_number_of_licenses = 0, max_number_of_licenses = Infinity, price_per_license)
-    ensure_valid_plan_name(plan)
+    ensure_valid_plan(plan)
     ensure_valid_min_number_of_licenses(min_number_of_licenses)
     ensure_valid_max_number_of_licenses(max_number_of_licenses)
     ensure_valid_price_per_license(price_per_license)
     ensure_max_is_higher_than_min(min_number_of_licenses, max_number_of_licenses)
   end
 
-  def ensure_valid_plan_name(plan)
+  def ensure_valid_plan(plan)
     unless $pricing_plans.include?(plan)
       raise ArgumentError, "Invalid plan name: #{plan}"
     end
@@ -50,8 +50,8 @@ class PricingModule
 
   def PricingModule.create (*args)
     begin
-      (plan_name, min, max, price) = PricingModule.get_args(*args)
-      price = PricingModule.new(plan_name, min, max, price)
+      (plan, min, max, price) = PricingModule.get_args(*args)
+      price = PricingModule.new(plan, min, max, price)
     rescue Exception => e
       return "Error with pricing module: #{e.message}"
     else
@@ -60,7 +60,7 @@ class PricingModule
   end
 
   def PricingModule.get_args (*args)
-    plan_name = args[0]
+    plan = args[0]
     min = args[1]
     case args.length
     when 3
@@ -72,7 +72,7 @@ class PricingModule
     else
       raise ArgumentError, "Invalid number of arguments"
     end
-    return [plan_name, min, max, price]
+    return [plan, min, max, price]
   end
 
   def to_json(*args)
