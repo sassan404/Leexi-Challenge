@@ -2,55 +2,50 @@ require_relative 'test_helper'
 
 class PricingModuleTest < Minitest::Test
 
+  def assert_exception (message, *args)
+    error = assert_raises(ArgumentError) do
+      PricingModule.create(*args)
+    end
+    assert_equal error.message, "Error with pricing module: #{message}"
+  end
+
   def test_fake_plan_name
-    model = PricingModule.create("Pricing Module 1", 1, 1, 1)
-    assert_equal "Error with pricing module: Invalid plan name: Pricing Module 1", model
+    assert_exception("Invalid plan name: Pricing Module 1", "Pricing Module 1", 1, 1, 1)
   end
 
   def test_enterprise_typo
-    model = PricingModule.create("entrprise", 1, 1, 1)
-    assert_equal "Error with pricing module: Invalid plan name: entrprise", model
+    assert_exception("Invalid plan name: entrprise", "entrprise", 1, 1, 1)
   end
 
   def test_negative_min_number_of_licenses
-    model = PricingModule.create("aiMeeting", -1, 1, 1)
-    assert_equal "Error with pricing module: Invalid min_number_of_licenses: -1", model
+    assert_exception("Invalid min_number_of_licenses: -1", "aiMeeting", -1, 1, 1)
   end
 
   def test_float_min_number_of_licenses
-    model = PricingModule.create("aiMeeting", 1.5, 1, 1)
-    assert_equal "Error with pricing module: Invalid min_number_of_licenses: 1.5", model
+    assert_exception("Invalid min_number_of_licenses: 1.5", "aiMeeting", 1.5, 1, 1)
   end
 
   def test_invalid_max_number_of_licenses
-    model = PricingModule.create("aiMeeting", 1, 1.5, 1)
-    assert_equal "Error with pricing module: Invalid max_number_of_licenses: 1.5", model
+    assert_exception("Invalid max_number_of_licenses: 1.5", "aiMeeting", 1, 1.5, 1)
   end
 
   def test_negative_price_per_license
-    model = PricingModule.create("aiMeeting", 1, 1, -1)
-    assert_equal "Error with pricing module: Invalid price_per_license: -1", model
+    assert_exception("Invalid price_per_license: -1", "aiMeeting", 1, 1, -1)
   end
 
   def test_invalid_price_per_license
-    model = PricingModule.create("aiMeeting", 1, 1, "abc")
-    assert_equal "Error with pricing module: Invalid price_per_license: abc", model
+    assert_exception("Invalid price_per_license: abc", "aiMeeting", 1, 1, "abc")
   end
 
   def test_min_higher_than_max
-    model = PricingModule.create("aiMeeting", 2, 1, 1)
-    assert_equal "Error with pricing module: min_number_of_licenses should be less than or equal to max_number_of_licenses", model
+    assert_exception("min_number_of_licenses should be less than or equal to max_number_of_licenses", "aiMeeting", 2, 1, 1)
   end
 
   def test_number_of_arguments
-    model = PricingModule.create("aiMeeting")
-    assert_equal "Error with pricing module: Invalid number of arguments", model
-    model = PricingModule.create("aiMeeting", 1)
-    assert_equal "Error with pricing module: Invalid number of arguments", model
-    model = PricingModule.create("aiMeeting", 1, 1, 1, 1)
-    assert_equal "Error with pricing module: Invalid number of arguments", model
-    model = PricingModule.create("aiMeeting", 1, 1, 1, 1, 1)
-    assert_equal "Error with pricing module: Invalid number of arguments", model
+    assert_exception("Invalid number of arguments", "aiMeeting")
+    assert_exception("Invalid number of arguments", "aiMeeting", 1)
+    assert_exception("Invalid number of arguments", "aiMeeting", 1, 1, 1, 1)
+    assert_exception("Invalid number of arguments", "aiMeeting", 1, 1, 1, 1, 1)
   end
 
   def test_get_prices_api
